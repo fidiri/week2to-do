@@ -9,7 +9,7 @@ function App() {
   const [todos, setTodos] = useState([
     {
       id: uuidv4(),
-      text: "React Hooks in Depth",
+      text: "React Hooks in",
       isCompleted: false,
     },
     {
