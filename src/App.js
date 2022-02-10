@@ -1,56 +1,83 @@
-import React, { useState } from "react";
-import Todo from "./components/Todo";
-import TodoForm from "./components/TodoForm";
+import React from "react";
 import "./App.css";
-import { v4 as uuidv4} from "uuid";
 
+function Todo({ todo, index, completeTodo, removeTodo }) {
+  return (
+    <div
+      className="todo"
+      style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
+    >
+      {todo.text}
+      <div>
+        <button onClick={() => completeTodo(index)}>Done</button>
+        <button onClick={() => removeTodo(index)}>x</button>
+      </div>
+    </div>
+  );
+}
+
+function TodoForm({ addTodo }) {
+  const [value, setValue] = React.useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!value) return;
+    addTodo(value);
+    setValue("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="input"
+        value={value}
+        onChange={e => setValue(e.target.value)}
+      />
+    </form>
+  );
+}
 
 function App() {
-  const [todos, setTodos] = useState([
+  const [todos, setTodos] = React.useState([
     {
-      id: uuidv4(),
-      text: "React Hooks in",
-      isCompleted: false,
+      text: "React hooks in Depth",
+      isCompleted: false
     },
     {
-      id: uuidv4(),
-      text: "Write Articles @ Medium",
-      isCompleted: false,
+      text: "Write articles @ Medium",
+      isCompleted: false
     },
     {
-      id: uuidv4(),
       text: "Share article at Reddit",
-      isCompleted: false,
-    },
+      isCompleted: false
+    }
   ]);
 
-  const addTodo = (text) => {
-    // make a copy of todos object and add a new object (id, text, and isCompleted)
-    // update the todos array with the setTodos function
+  const addTodo = text => {
+    const newTodos = [...todos, { text }];
+    setTodos(newTodos);
   };
 
-  // Week 3 assignment (you can work on it now if you want):
-  const completeTodo = (index) => {
-    // make a copy of todos array 
-    // toggle the isCompleted value of the todo at the index
-    // update the todos array with the setTodos function
+  const completeTodo = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = true;
+    setTodos(newTodos);
   };
 
-  // Week 3 assignment (you can work on it now if you want):
-  const removeTodo = (index) => {
-     // make a copy of todos array 
-     // remove the todo at the index
-     // update the todos array with the setTodos function
+  const removeTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
   };
 
   return (
     <div className="app">
       <div className="todo-list">
-        <h1 className="title">Todo App</h1>
-        {todos.map((todo) => (
+        {todos.map((todo, index) => (
           <Todo
-            key={todo.id}
-            index={todo.id}
+            key={index}
+            index={index}
             todo={todo}
             completeTodo={completeTodo}
             removeTodo={removeTodo}
